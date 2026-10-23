@@ -13,8 +13,6 @@ public class SwaggerConfig {
      */
     @Bean
     public OpenAPI customOpenAPI() {
-        return new OpenAPI().info(new Info().title("Financial Statistics API").version("1.0")
-                .description("Ez egy pénzügyi statisztikai API dokumentáció")); // TODO Átírni a descriptiont és a
-                                                                                // titlet.
+        return new OpenAPI().info(new Info().title("Accounting Project").version("1.0").description("Billingo"));
     }
 }
