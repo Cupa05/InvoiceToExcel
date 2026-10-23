@@ -1,29 +1,33 @@
 package com.invoicereader.invoiceToExcel.service;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.stereotype.Service;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Service;
+
+import com.invoicereader.invoiceToExcel.dto.InvoiceItemsDto;
+
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class ExcelService {
 
-    public byte[] generateExcel() throws IOException {
-        try (XSSFWorkbook workbook = new XSSFWorkbook();
-             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+    private final DummyData dummyData;
 
-            Sheet s1 = workbook.createSheet("2026");
-            Row row = s1.createRow(0);
-            Cell cell = row.createCell(0);
-            cell.setCellValue("Valami");
+    private final SummarySheetGenerator summarySheetGenerator;
 
+    public byte[] generateExcel(/* OffsetDateTime from, OffsetDateTime to */) throws IOException {
+        InvoiceItemsDto data = dummyData.create();
+        try (XSSFWorkbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+
+            summarySheetGenerator.createSummarySheet(workbook, data/* , from, to */);
+            // TODO n darab személy számlái külön munkalapon
 
             workbook.write(out);
             return out.toByteArray();
         }
     }
+
 }

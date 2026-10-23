@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AccountDto {
     private String name;
+    private String email;
     private AddressDto address;
 }
