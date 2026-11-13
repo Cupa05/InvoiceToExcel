@@ -2,8 +2,10 @@ package com.invoicereader.invoiceToExcel.service;
 
 import static com.invoicereader.invoiceToExcel.constants.Constants.*;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import com.invoicereader.invoiceToExcel.dto.AddressDto;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
@@ -19,6 +21,8 @@ import com.invoicereader.invoiceToExcel.dto.InvoiceItemsDto;
 @Service
 public class SummarySheetGenerator {
 
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT);
+
     public void createSummarySheet(Workbook workbook,
             InvoiceItemsDto data/* , OffsetDateTime from, OffsetDateTime to */) {
         Sheet summary = workbook.createSheet(SUMMARY_TEXT + getNickName(data.getSeller().getName()));
@@ -27,20 +31,22 @@ public class SummarySheetGenerator {
         // 1
         summary.addMergedRegion(CellRangeAddress.valueOf("A1:K1"));
         Row row1 = summary.createRow(0);
+        row1.setHeight(HEADER_HEIGHT);
         createCell(workbook, row1, 0, "SZÁMLÁK LEKÉRDEZÉSE: "/* + from + " " + to, */, BackGroundColorType.ORANGE);
         // TODO a végpontról jöjjön be egy dátum tól ig érték
 
         // 2
         summary.addMergedRegion(CellRangeAddress.valueOf("A2:K2"));
         Row row2 = summary.createRow(1);
+        row2.setHeight(HEADER_HEIGHT);
         createCell(workbook, row2, 0, "SZÁMLÁK", BackGroundColorType.GREEN);
 
         // 3
         Row row3 = summary.createRow(2);
-        createCell(workbook, row3, 0, "Vevő neve", BackGroundColorType.GREEN);
-        createCell(workbook, row3, 1, "Vevő email", BackGroundColorType.GREEN);
-        createCell(workbook, row3, 2, "Vevő ország", BackGroundColorType.GREEN);
-        // TODO többi oszlop
+        row3.setHeight(HEADER_HEIGHT);
+        for (int i = 0; i < HEADER.size(); i++) {
+            createCell(workbook, row3, i, HEADER.get(i), BackGroundColorType.GREEN);
+        }
 
         createBorder(1, 4, 1, 11, BorderStyle.MEDIUM, summary);
 
@@ -48,13 +54,27 @@ public class SummarySheetGenerator {
         // 4
         for (int i = 0; i < data.getItems().size(); i++) {
             InvoiceDto currentItem = data.getItems().get(i);
+            AddressDto address = currentItem.getCustomer().getAddress();
             Row row = summary.createRow(i + 3);
+            row.setHeight(DATA_HEIGHT);
+
             createCell(workbook, row, 0, currentItem.getCustomer().getName(), BackGroundColorType.ORANGE);
             createCell(workbook, row, 1, currentItem.getCustomer().getEmail(), BackGroundColorType.ORANGE);
-            // TODO többi oszlop
+            createCell(workbook, row, 2, address.getCountry(), BackGroundColorType.ORANGE);
+            createCell(workbook, row, 3, address.getPostalCode() + SPACE + address.getCity() + COMMA + SPACE + address.getStreetAndHouseNumber(), BackGroundColorType.ORANGE);
+            createCell(workbook, row, 4, currentItem.getInvoiceNumber(), BackGroundColorType.ORANGE);
+            createCell(workbook, row, 5, currentItem.getDetails().getInvoiceDate().format(FORMATTER), BackGroundColorType.ORANGE);
+            createCell(workbook, row, 6, currentItem.getDetails().getPaymentDeadline().format(FORMATTER), BackGroundColorType.ORANGE);
+            createCell(workbook, row, 7, currentItem.getDetails().getDateOfPayment().format(FORMATTER), BackGroundColorType.ORANGE);
+            createCell(workbook, row, 8, currentItem.getDetails().getPaymentMode(), BackGroundColorType.ORANGE);
+            createCell(workbook, row, 9, currentItem.getPricing().getNetAmount().toString(), BackGroundColorType.ORANGE);
+            createCell(workbook, row, 10, currentItem.getPricing().getCurrency(), BackGroundColorType.ORANGE);
         }
-        System.out.println(data.getItems().size());
         createBorder(4, 4 + data.getItems().size(), 1, 11, BorderStyle.THIN, summary);
+
+        for (int i = 0; i <HEADER.size(); i++) {
+            summary.setColumnWidth(i, COLUMN_WIDTH);
+        }
 
     }
 
