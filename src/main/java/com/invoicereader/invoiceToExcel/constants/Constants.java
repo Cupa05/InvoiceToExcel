@@ -24,19 +24,9 @@ public class Constants {
     private static final String NET_AMOUNT = "Nettó összeg";
     private static final String CURRENCY = "Deviza";
 
-    public static final List<String> HEADER = Arrays.asList(
-            CUSTOMER_NAME,
-            CUSTOMER_EMAIL,
-            CUSTOMER_COUNTRY,
-            CUSTOMER_ADDRESS,
-            INVOICE_NUMBER,
-            INVOICE_DATE,
-            PAYMENT_DEADLINE,
-            DATE_OF_PAYMENT,
-            PAYMENT_MODE,
-            NET_AMOUNT,
-            CURRENCY
-    );
+    public static final List<String> HEADER = Arrays.asList(CUSTOMER_NAME, CUSTOMER_EMAIL, CUSTOMER_COUNTRY,
+            CUSTOMER_ADDRESS, INVOICE_NUMBER, INVOICE_DATE, PAYMENT_DEADLINE, DATE_OF_PAYMENT, PAYMENT_MODE, NET_AMOUNT,
+            CURRENCY);
 
     public static final short HEADER_HEIGHT = (short) (20 * 30);
     public static final short DATA_HEIGHT = (short) (20 * 25);

@@ -5,7 +5,6 @@ import static com.invoicereader.invoiceToExcel.constants.Constants.*;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import com.invoicereader.invoiceToExcel.dto.AddressDto;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.invoicereader.invoiceToExcel.constants.BackGroundColorType;
 import com.invoicereader.invoiceToExcel.constants.BackgroundColor;
+import com.invoicereader.invoiceToExcel.dto.AddressDto;
 import com.invoicereader.invoiceToExcel.dto.InvoiceDto;
 import com.invoicereader.invoiceToExcel.dto.InvoiceItemsDto;
 
@@ -61,18 +61,23 @@ public class SummarySheetGenerator {
             createCell(workbook, row, 0, currentItem.getCustomer().getName(), BackGroundColorType.ORANGE);
             createCell(workbook, row, 1, currentItem.getCustomer().getEmail(), BackGroundColorType.ORANGE);
             createCell(workbook, row, 2, address.getCountry(), BackGroundColorType.ORANGE);
-            createCell(workbook, row, 3, address.getPostalCode() + SPACE + address.getCity() + COMMA + SPACE + address.getStreetAndHouseNumber(), BackGroundColorType.ORANGE);
+            createCell(workbook, row, 3, address.getPostalCode() + SPACE + address.getCity() + COMMA + SPACE
+                    + address.getStreetAndHouseNumber(), BackGroundColorType.ORANGE);
             createCell(workbook, row, 4, currentItem.getInvoiceNumber(), BackGroundColorType.ORANGE);
-            createCell(workbook, row, 5, currentItem.getDetails().getInvoiceDate().format(FORMATTER), BackGroundColorType.ORANGE);
-            createCell(workbook, row, 6, currentItem.getDetails().getPaymentDeadline().format(FORMATTER), BackGroundColorType.ORANGE);
-            createCell(workbook, row, 7, currentItem.getDetails().getDateOfPayment().format(FORMATTER), BackGroundColorType.ORANGE);
+            createCell(workbook, row, 5, currentItem.getDetails().getInvoiceDate().format(FORMATTER),
+                    BackGroundColorType.ORANGE);
+            createCell(workbook, row, 6, currentItem.getDetails().getPaymentDeadline().format(FORMATTER),
+                    BackGroundColorType.ORANGE);
+            createCell(workbook, row, 7, currentItem.getDetails().getDateOfPayment().format(FORMATTER),
+                    BackGroundColorType.ORANGE);
             createCell(workbook, row, 8, currentItem.getDetails().getPaymentMode(), BackGroundColorType.ORANGE);
-            createCell(workbook, row, 9, currentItem.getPricing().getNetAmount().toString(), BackGroundColorType.ORANGE);
+            createCell(workbook, row, 9, currentItem.getPricing().getNetAmount().toString(),
+                    BackGroundColorType.ORANGE);
             createCell(workbook, row, 10, currentItem.getPricing().getCurrency(), BackGroundColorType.ORANGE);
         }
         createBorder(4, 4 + data.getItems().size(), 1, 11, BorderStyle.THIN, summary);
 
-        for (int i = 0; i <HEADER.size(); i++) {
+        for (int i = 0; i < HEADER.size(); i++) {
             summary.setColumnWidth(i, COLUMN_WIDTH);
         }
 
