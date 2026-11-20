@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class InvoiceItemsDto {
     private AccountDto seller;
     private List<InvoiceDto> items;
+    private String filteredInvoiceString;
 }

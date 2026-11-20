@@ -5,10 +5,13 @@ import java.util.List;
 
 public class Constants {
 
-    public static final String SUMMARY_TEXT = "Összesítő_";
-
     public static final String SPACE = " ";
     public static final String COMMA = ",";
+    public static final String COLON = ":";
+
+    public static final String SUMMARY_TEXT = "Összesítő_";
+    public static final String INVOICES = "SZÁMLÁK";
+    public static final String INVOICES_QUERY = INVOICES + SPACE + "LEKÉRDEZÉSE" + COLON + SPACE;
 
     public static final String DATE_FORMAT = "yyyy.MM.dd.";
 

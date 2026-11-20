@@ -1,13 +1,18 @@
 package com.invoicereader.invoiceToExcel.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.invoicereader.invoiceToExcel.service.ExcelService;
@@ -23,12 +28,13 @@ public class ExcelController {
 
     @GetMapping("/generate")
     public ResponseEntity<byte[]> generateExcel(
-    // TODO
-    // @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd") OffsetDateTime
-    // from,
-    // @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd") OffsetDateTime to
-    ) throws IOException {
-        byte[] excelBytes = excelService.generateExcel();
+            @RequestParam(name = "from", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fromDate,
+            @RequestParam(name = "to", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate toDate)
+            throws IOException {
+        OffsetDateTime from = fromDate == null ? null : fromDate.atStartOfDay().atOffset(ZoneOffset.UTC);
+        OffsetDateTime to = toDate == null ? null : toDate.atStartOfDay().atOffset(ZoneOffset.UTC);
+
+        byte[] excelBytes = excelService.generateExcel(from, to);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(

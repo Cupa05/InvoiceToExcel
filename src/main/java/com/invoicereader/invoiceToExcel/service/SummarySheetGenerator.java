@@ -23,8 +23,7 @@ public class SummarySheetGenerator {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT);
 
-    public void createSummarySheet(Workbook workbook,
-            InvoiceItemsDto data/* , OffsetDateTime from, OffsetDateTime to */) {
+    public void createSummarySheet(Workbook workbook, InvoiceItemsDto data) {
         Sheet summary = workbook.createSheet(SUMMARY_TEXT + getNickName(data.getSeller().getName()));
 
         // ----------------HEADER
@@ -32,14 +31,13 @@ public class SummarySheetGenerator {
         summary.addMergedRegion(CellRangeAddress.valueOf("A1:K1"));
         Row row1 = summary.createRow(0);
         row1.setHeight(HEADER_HEIGHT);
-        createCell(workbook, row1, 0, "SZÁMLÁK LEKÉRDEZÉSE: "/* + from + " " + to, */, BackGroundColorType.ORANGE);
-        // TODO a végpontról jöjjön be egy dátum tól ig érték
+        createCell(workbook, row1, 0, INVOICES_QUERY + data.getFilteredInvoiceString(), BackGroundColorType.ORANGE);
 
         // 2
         summary.addMergedRegion(CellRangeAddress.valueOf("A2:K2"));
         Row row2 = summary.createRow(1);
         row2.setHeight(HEADER_HEIGHT);
-        createCell(workbook, row2, 0, "SZÁMLÁK", BackGroundColorType.GREEN);
+        createCell(workbook, row2, 0, INVOICES, BackGroundColorType.GREEN);
 
         // 3
         Row row3 = summary.createRow(2);
